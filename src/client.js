@@ -7,11 +7,16 @@ import {
 } from './actions';
 
 let client;
+let endpoint;
+let dp;
 
-async function setupClient(dispatch) {
+async function setupClient(store) {
+  const { dispatch, getState } = store;
+  dp = dispatch;
   const username = process.env.REACT_APP_USERNAME;
   const registryUrl = process.env.REACT_APP_REGISTRY_URL;
   let error;
+
   client = new Client(
     username,
     registryUrl
@@ -26,10 +31,11 @@ async function setupClient(dispatch) {
   }
 
   if (error) {
+    console.log(error);
     return;
   }
 
-  dispatch(setTenant(tenant));
+  dp(setTenant(tenant));
 
   const session = await client.login(process.env.REACT_APP_USERNAME, process.env.REACT_APP_PASSWORD, { url: process.env.REACT_APP_TOKEN_URL }).catch(err => {
     error = err
@@ -44,7 +50,7 @@ async function setupClient(dispatch) {
     return;
   }
 
-  dispatch(setSession(session));
+  dp(setSession(session));
 
   const metadataService = await client.service('metadata').catch(err => {
     error = err
@@ -59,9 +65,7 @@ async function setupClient(dispatch) {
     return;
   }
 
-  const endpoint = await metadataService.resourcefulEndpoint('contents').catch(err => {
-    error = err;
-  });
+  endpoint = await metadataService.resourcefulEndpoint('contents');
 
   if (!endpoint) {
     error = 'no endpoint';
@@ -72,33 +76,44 @@ async function setupClient(dispatch) {
     return;
   }
 
-  dispatch(setEndpoint(endpoint));
+  if (!endpoint) return 'no endpoint';
 
-  const collection = await endpoint.browse(where(field('title').startsWith('')).fields(
+  dp(setEndpoint(endpoint));
+
+  setCollection(getState().filter, getState().page);
+}
+
+export const setCollection = async (filter, page) => {
+  const collection = await endpoint.browse(where(field('title').startsWith(filter || '')).fields(
     'title',
     'mediumSynopsis',
     'duration',
     'ref',
     'type',
     'owner',
-  ).include('assets').page(1)
-    .perPage(100)
+  ).include('assets').page(page || 1)
+    .perPage(10)
     .orderByUpdatedAt()
     .desc()
     .count()).catch(err => {
-      error = err
+      console.log(err);
     });
+  const data = collection.rawData.contents;
+  dp(setData(data));
+}
 
-  if (!collection) {
-    error = 'no collection';
-  }
-  
-  if (error) {
-    console.log(error);
-    return;
-  }
+export const createData = async data => {
+  const newResource = endpoint.newResource(data);
+  await newResource.save();
+  return Promise.resolve();
+}
 
-  setData(collection);
+export const findItem = async ref => {
+  const collection = await endpoint.browse(where(field('ref').equalTo(ref)).fields(
+    'title',
+    'ref'
+  ));
+  return collection.find(ref);
 }
 
 export default setupClient;

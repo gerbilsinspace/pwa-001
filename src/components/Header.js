@@ -9,7 +9,7 @@ import Icon from 'material-ui/Icon';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button'
 import { setModal, setFilter, setPage } from '../actions';
-import './header.css';
+import { setCollection } from '../client';
 
 const styles = {
   root: {
@@ -18,7 +18,15 @@ const styles = {
 };
 
 function HeaderComponent(props) {
-  const { classes, onAddButtonClick, filter, page, onPageChangeClick, handleChange } = props;
+  const {
+    classes,
+    onAddButtonClick,
+    filter,
+    page,
+    onPageChangeClick,
+    handleFilterChange,
+    onFilterClick
+  } = props;
 
   return (
     <div className={classes.root}>
@@ -36,7 +44,7 @@ function HeaderComponent(props) {
             id="filter"
             placeholder="Filter by Title"
             value={filter}
-            onChange={handleChange('filter')}
+            onChange={handleFilterChange}
             margin="normal"
             style={{
               background: '#fff',
@@ -51,10 +59,15 @@ function HeaderComponent(props) {
           <Button variant='raised' style={{
             marginRight: '10px'
           }} onClick={() => {
-            onPageChangeClick(page - 1);
+            onFilterClick(filter, page);
+          }}>Filter</Button>
+          <Button variant='raised' style={{
+            marginRight: '10px'
+          }} onClick={() => {
+            onPageChangeClick(filter, page - 1);
           }}>Prev</Button>
           <Button variant='raised' onClick={() => {
-            onPageChangeClick(page + 1);
+            onPageChangeClick(filter, page + 1);
           }}>Next</Button>
         </Toolbar>
       </AppBar>
@@ -65,19 +78,25 @@ function HeaderComponent(props) {
 const mapStateToProps = state => ({
   modalVisible: state.modalVisible,
   filter: state.filter,
-  page: state.page
+  endpoint: state.endpoint,
+  page: state.page,
+  data: state.data
 });
 
 const mapDispatchToProps = dispatch => ({
   onAddButtonClick: () => {
     dispatch(setModal(true));
   },
-  handleChange: type => event => {
-    if (type === 'filter') {
-      dispatch(setFilter(event.target.value));
-    }
+  handleFilterChange: event => {
+    const filter = event.target.value;
+    dispatch(setFilter(filter));
   },
-  onPageChangeClick: page => {
+  onFilterClick: async (filter, page) => {
+    setCollection(filter, page);
+    dispatch(setFilter(''))
+  },
+  onPageChangeClick: async (filter, page) => {
+    setCollection(filter, page);
     dispatch(setPage(page));
   }
 })

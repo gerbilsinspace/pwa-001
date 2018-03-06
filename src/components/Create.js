@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
   setModal,
   changeTitle,
-  changeMediumDescription,
+  changeMediumSynopsis,
   changeType,
   addData
 } from '../actions';
@@ -16,6 +16,7 @@ import { InputLabel } from 'material-ui/Input';
 import Select from 'material-ui/Select';
 import Button from 'material-ui/Button';
 import { MenuItem } from 'material-ui/Menu';
+import { createData, setCollection } from '../client';
 
 const styles = theme => ({
   paper: {
@@ -27,13 +28,24 @@ const styles = theme => ({
   },
 });
 
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
+
 const Create = (props) => {
   const {
     modalVisible = false,
     onCloseModalClick,
     classes,
     title,
-    mediumDescription,
+    mediumSynopsis,
     contentType,
     handleChange,
     onSaveClick
@@ -66,10 +78,10 @@ const Create = (props) => {
             </div>
             <div>
               <TextField
-                id="mediumDescription"
-                label="Medium Description"
-                value={mediumDescription}
-                onChange={handleChange('mediumDescription')}
+                id="mediumSynopsis"
+                label="Medium Synopsis"
+                value={mediumSynopsis}
+                onChange={handleChange('mediumSynopsis')}
                 margin="normal"
                 multiline
                 rows='4'
@@ -98,7 +110,7 @@ const Create = (props) => {
             </div>
             <div>
               <Button variant='raised' color='primary' onClick={() => {
-                onSaveClick(title, mediumDescription, contentType);
+                onSaveClick(title, mediumSynopsis, contentType);
               }}>Save</Button>
             </div>
           </form>
@@ -108,23 +120,10 @@ const Create = (props) => {
   );
 }
 
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
-
-const StyledCreateModal = withStyles(styles)(Create);
-
 const mapStateToProps = state => ({
   modalVisible: state.modalVisible,
   title: state.title,
-  mediumDescription: state.mediumDescription,
+  mediumSynopsis: state.mediumSynopsis,
   contentType: state.contentType
 });
 
@@ -135,15 +134,28 @@ const mapDispatchToProps = dispatch => ({
   handleChange: name => event => {
     if (name === 'title') {
       dispatch(changeTitle(event.target.value));
-    } else if (name === 'mediumDescription') {
-      dispatch(changeMediumDescription(event.target.value));
+    } else if (name === 'mediumSynopsis') {
+      dispatch(changeMediumSynopsis(event.target.value));
     } else if (name === 'type') {
       dispatch(changeType(event.target.value));
     }
   },
-  onSaveClick: (title, mediumDescription, contentType) => {
-    dispatch(addData(title, mediumDescription, contentType));
+  onSaveClick: async (title, mediumSynopsis, contentType) => {
+    dispatch(addData(title, mediumSynopsis, contentType || 'episode'));
+    await createData({
+      title,
+      mediumSynopsis: mediumSynopsis || '',
+      type: contentType || 'episode',
+      owner: 'demo'
+    });
+    setCollection();
+    dispatch(changeTitle(''));
+    dispatch(changeMediumSynopsis(''));
+    dispatch(changeType(''));
+    dispatch(setModal(false));
   }
 });
+
+const StyledCreateModal = withStyles(styles)(Create);
 
 export default connect(mapStateToProps, mapDispatchToProps)(StyledCreateModal);

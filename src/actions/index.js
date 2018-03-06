@@ -14,11 +14,11 @@ export function changeTitle(title) {
   }
 }
 
-export const CHANGE_MEDIUM_DESCRIPTION = 'CHANGE_MEDIUM_DESCRIPTION';
-export function changeMediumDescription(mediumDescription) {
+export const CHANGE_MEDIUM_SYNOPSIS = 'CHANGE_MEDIUM_SYNOPSIS';
+export function changeMediumSynopsis(mediumSynopsis) {
   return {
-    type: CHANGE_MEDIUM_DESCRIPTION,
-    mediumDescription
+    type: CHANGE_MEDIUM_SYNOPSIS,
+    mediumSynopsis
   }
 }
 
@@ -31,11 +31,11 @@ export function changeType(contentType) {
 }
 
 export const ADD_DATA = 'ADD_DATA';
-export function addData(title, mediumDescription, contentType) {
+export function addData(title, mediumSynopsis, contentType) {
   return {
     type: ADD_DATA,
     title,
-    mediumDescription,
+    mediumSynopsis,
     contentType
   }
 }
@@ -85,5 +85,30 @@ export function setPage(page) {
   return {
     type: SET_PAGE,
     page
+  }
+}
+
+export const SET_DELETE_MODAL = 'SET_DELETE_MODAL';
+export function setDeleteModal(deleteModal, deleteIndex) {
+  return {
+    type: SET_DELETE_MODAL,
+    deleteModal,
+    deleteIndex
+  }
+}
+
+export const SET_EDIT_MODAL = 'SET_EDIT_MODAL';
+export function setEditModal(editModal) {
+  return {
+    type: SET_EDIT_MODAL,
+    editModal
+  }
+}
+
+export const SET_DELETE_INDEX = 'SET_DELETE_INDEX';
+export function setDeleteIndex(deleteIndex) {
+  return {
+    type: SET_DELETE_INDEX,
+    deleteIndex
   }
 }

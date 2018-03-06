@@ -1,26 +1,34 @@
 import {
   SET_MODAL,
   CHANGE_TITLE,
-  CHANGE_MEDIUM_DESCRIPTION,
+  CHANGE_MEDIUM_SYNOPSIS,
   CHANGE_TYPE,
   ADD_DATA,
   SET_SESSION,
   SET_TENANT,
   SET_ENDPOINT,
   SET_FILTER,
-  SET_PAGE
+  SET_PAGE,
+  SET_DATA,
+  SET_DELETE_MODAL,
+  SET_EDIT_MODAL,
+  SET_DELETE_INDEX
 } from '../actions';
 
 const reducers = (state = {
   modalVisible: false,
   title: '',
-  mediumDescription: '',
+  mediumSynopsis: '',
   contentType: '',
   session: {},
   tenant: {},
   endpoint: {},
   filter: '',
-  page: 1
+  page: 1,
+  data: [],
+  deleteModal: false,
+  editModal: false,
+  deleteIndex: -1
 }, action) => {
   let result = { ...state };
 
@@ -31,13 +39,11 @@ const reducers = (state = {
     case CHANGE_TITLE:
       result.title = action.title;
       return result;
-    case CHANGE_MEDIUM_DESCRIPTION:
-      result.mediumDescription = action.mediumDescription;
+    case CHANGE_MEDIUM_SYNOPSIS:
+      result.mediumSynopsis = action.mediumSynopsis;
       return result;
     case CHANGE_TYPE:
       result.contentType = action.contentType;
-      return result;
-    case ADD_DATA:
       return result;
     case SET_SESSION:
       result.session = action.session;
@@ -53,6 +59,25 @@ const reducers = (state = {
       return result;
     case SET_PAGE:
       result.page = action.page >= 1 ? action.page : 1;
+      return result;
+    case SET_DATA:
+      result.data = [ ...action.data ];
+      return result;
+    case ADD_DATA:
+      result.data = [...state.data, {
+        title: action.title,
+        mediumSynopsis: action.mediumSynopsis,
+        contentType: action.contentType
+      }]
+      return result;
+    case SET_DELETE_MODAL:
+      result.deleteModal = action.deleteModal;
+      return result;
+    case SET_EDIT_MODAL:
+      result.editModal = action.editModal;
+      return result;
+    case SET_DELETE_INDEX:
+      result.deleteIndex = action.deleteIndex;
       return result;
     default:
       return result;
