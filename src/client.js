@@ -108,12 +108,16 @@ export const createData = async data => {
   return Promise.resolve();
 }
 
+export const editData = async (data) => {
+  await data.save().catch(err => {
+    console.log(err);
+  });
+}
+
 export const findItem = async ref => {
-  const collection = await endpoint.browse(where(field('ref').equalTo(ref)).fields(
-    'title',
-    'ref'
-  ));
-  return collection.find(ref);
+  const collection = await endpoint.browse(where(field('ref').equalTo(ref)));
+  
+  return Promise.resolve(await collection.find(ref));
 }
 
 export default setupClient;

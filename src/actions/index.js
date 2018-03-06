@@ -40,6 +40,16 @@ export function addData(title, mediumSynopsis, contentType) {
   }
 }
 
+export const EDIT_DATA = 'EDIT_DATA';
+export function editData(title, mediumSynopsis, contentType) {
+  return {
+    type: EDIT_DATA,
+    title,
+    mediumSynopsis,
+    contentType
+  }
+}
+
 export const SET_SESSION = 'SET_SESSION';
 export function setSession(session) {
   return {
@@ -110,5 +120,13 @@ export function setDeleteIndex(deleteIndex) {
   return {
     type: SET_DELETE_INDEX,
     deleteIndex
+  }
+}
+
+export const SET_EDIT_INDEX = 'SET_EDIT_INDEX';
+export function setEditIndex(editIndex) {
+  return {
+    type: SET_EDIT_INDEX,
+    editIndex
   }
 }

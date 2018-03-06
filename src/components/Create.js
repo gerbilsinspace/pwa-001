@@ -5,18 +5,12 @@ import {
   setModal,
   changeTitle,
   changeMediumSynopsis,
-  changeType,
-  addData
+  changeType
 } from '../actions';
 import { withStyles } from 'material-ui/styles';
-import TextField from 'material-ui/TextField';
 import Typography from 'material-ui/Typography';
-import { FormControl } from 'material-ui/Form';
-import { InputLabel } from 'material-ui/Input';
-import Select from 'material-ui/Select';
-import Button from 'material-ui/Button';
-import { MenuItem } from 'material-ui/Menu';
 import { createData, setCollection } from '../client';
+import ModalForm from './ModalForm'
 
 const styles = theme => ({
   paper: {
@@ -54,66 +48,22 @@ const Create = (props) => {
   return (
     <div>
       <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+        aria-labelledby="create-modal"
+        aria-describedby="create-modal"
         open={modalVisible}
         onClose={onCloseModalClick}
       >
         <div style={getModalStyle()} className={classes.paper}>
-          <Typography variant="title" id="modal-title">
+          <Typography variant="title" id="create-modal-title">
             Create
-          </Typography>  
-          <form noValidate autoComplete="off">
-            <div>
-              <TextField
-                id="title"
-                label="Title"
-                value={title}
-                onChange={handleChange('title')}
-                margin="normal"
-                style={{
-                  width: '100%'
-                }}
-              />
-            </div>
-            <div>
-              <TextField
-                id="mediumSynopsis"
-                label="Medium Synopsis"
-                value={mediumSynopsis}
-                onChange={handleChange('mediumSynopsis')}
-                margin="normal"
-                multiline
-                rows='4'
-                style={{
-                  width: '100%'
-                }}
-              />
-            </div>
-            <div>
-              <FormControl>
-                <InputLabel htmlFor="content-type" style={{
-                  width: '100%'
-                }}>Type</InputLabel>
-                <Select
-                  value={contentType || 'episode'}
-                  onChange={handleChange('type')}
-                  inputProps={{
-                    name: 'contentType',
-                    id: 'content-type',
-                  }}
-                >
-                  <MenuItem value='episode'>Episode</MenuItem>
-                  <MenuItem value='show'>Show</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-            <div>
-              <Button variant='raised' color='primary' onClick={() => {
-                onSaveClick(title, mediumSynopsis, contentType);
-              }}>Save</Button>
-            </div>
-          </form>
+          </Typography>
+          <ModalForm
+            title={title}
+            mediumSynopsis={mediumSynopsis}
+            contentType={contentType}
+            handleChange={handleChange}
+            onSaveClick={onSaveClick}
+          />
         </div>
       </Modal>
     </div>
@@ -141,7 +91,6 @@ const mapDispatchToProps = dispatch => ({
     }
   },
   onSaveClick: async (title, mediumSynopsis, contentType) => {
-    dispatch(addData(title, mediumSynopsis, contentType || 'episode'));
     await createData({
       title,
       mediumSynopsis: mediumSynopsis || '',

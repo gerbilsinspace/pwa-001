@@ -12,7 +12,9 @@ import {
   SET_DATA,
   SET_DELETE_MODAL,
   SET_EDIT_MODAL,
-  SET_DELETE_INDEX
+  SET_DELETE_INDEX,
+  EDIT_DATA,
+  SET_EDIT_INDEX
 } from '../actions';
 
 const reducers = (state = {
@@ -28,7 +30,8 @@ const reducers = (state = {
   data: [],
   deleteModal: false,
   editModal: false,
-  deleteIndex: -1
+  deleteIndex: -1,
+  editIndex: -1
 }, action) => {
   let result = { ...state };
 
@@ -79,6 +82,11 @@ const reducers = (state = {
     case SET_DELETE_INDEX:
       result.deleteIndex = action.deleteIndex;
       return result;
+    case SET_EDIT_INDEX:
+      result.editIndex = action.editIndex;
+      return result;
+    case EDIT_DATA:
+      return result;  
     default:
       return result;
   }

@@ -28,16 +28,15 @@ function getModalStyle() {
   };
 }
 
-const Delete = props => {
-  const {
-    open,
-    onDeleteModalCloseClick,
-    classes,
-    onDeleteConfirmClick,
-    item,
-    filter,
-    page
-  } = props;
+const Delete = ({
+  open,
+  onDeleteModalCloseClick,
+  classes,
+  onDeleteConfirmClick,
+  item,
+  filter,
+  page
+}) => {
   const ref = item && item.ref ? item.ref : '';
   return (
     <Modal

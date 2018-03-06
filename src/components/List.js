@@ -3,11 +3,21 @@ import Card, { CardContent, CardActions } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import { connect } from 'react-redux';
-import { setEditModal, setDeleteModal, setDeleteIndex } from '../actions';
+import {
+  setEditModal,
+  setEditIndex,
+  setDeleteModal,
+  setDeleteIndex,
+  changeTitle,
+  changeMediumSynopsis,
+  changeType
+} from '../actions';
 
-const List = props => {
-  const { data = [], onEditClick, onDeleteStartClick } = props;
-
+const List = ({
+  data = [],
+  onEditStartClick,
+  onDeleteStartClick
+}) => {
   const cards = data.map((dataItem, index) => (
     <Card key={index}>
       <CardContent>
@@ -20,10 +30,10 @@ const List = props => {
         <Button variant='raised' color='primary' style={{
           marginRight: '10px'
         }} onClick={() => {
-          onEditClick(dataItem, index);
+          onEditStartClick(index, dataItem.title, dataItem.mediumSynopsis, dataItem.type);
         }}>Edit</Button>
         <Button variant='raised' color='secondary' onClick={() => {
-          onDeleteStartClick(dataItem, index);
+          onDeleteStartClick(index);
         }}>Delete</Button>
       </CardActions>
     </Card>
@@ -45,10 +55,14 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onEditClick(data, index) {
+  onEditStartClick(index, title, mediumSynopsis, contentType) {
+    dispatch(changeTitle(title));
+    dispatch(changeMediumSynopsis(mediumSynopsis));
+    dispatch(changeType(contentType));
+    dispatch(setEditIndex(index));
     dispatch(setEditModal(true));
   },
-  onDeleteStartClick(data, index) {
+  onDeleteStartClick(index) {
     dispatch(setDeleteIndex(index));
     dispatch(setDeleteModal(true, index));
   }
