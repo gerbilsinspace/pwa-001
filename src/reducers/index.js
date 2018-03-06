@@ -31,7 +31,8 @@ const reducers = (state = {
   deleteModal: false,
   editModal: false,
   deleteIndex: -1,
-  editIndex: -1
+  editIndex: -1,
+  loading: true
 }, action) => {
   let result = { ...state };
 
@@ -64,7 +65,8 @@ const reducers = (state = {
       result.page = action.page >= 1 ? action.page : 1;
       return result;
     case SET_DATA:
-      result.data = [ ...action.data ];
+      result.data = [...action.data];
+      result.loading = false;
       return result;
     case ADD_DATA:
       result.data = [...state.data, {

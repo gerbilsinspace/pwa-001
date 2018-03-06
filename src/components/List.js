@@ -12,32 +12,42 @@ import {
   changeMediumSynopsis,
   changeType
 } from '../actions';
+import Loading from 'react-loading';
 
 const List = ({
   data = [],
   onEditStartClick,
-  onDeleteStartClick
+  onDeleteStartClick,
+  loading
 }) => {
-  const cards = data.map((dataItem, index) => (
-    <Card key={index}>
-      <CardContent>
-        <Typography variant="headline" component="h2">{dataItem.title}</Typography>
-        <Typography>Medium Synopsis: {dataItem.mediumSynopsis || ''}</Typography>
-        <Typography>Type: {dataItem.contentType || dataItem.type || ''}</Typography>
-        <Typography>Owner: {dataItem.owner || ''}</Typography>
-      </CardContent>
-      <CardActions style={{paddingBottom: '20px', paddingLeft: '10px' }}>
-        <Button variant='raised' color='primary' style={{
-          marginRight: '10px'
-        }} onClick={() => {
-          onEditStartClick(index, dataItem.title, dataItem.mediumSynopsis, dataItem.type);
-        }}>Edit</Button>
-        <Button variant='raised' color='secondary' onClick={() => {
-          onDeleteStartClick(index);
-        }}>Delete</Button>
-      </CardActions>
-    </Card>
-  ));
+  const cards = data.map((dataItem, index) => {
+    return (
+      <Card key={index}>
+        <CardContent>
+          <Typography variant="headline" component="h2">{dataItem.title}</Typography>
+          <Typography>Medium Synopsis: {dataItem.mediumSynopsis || ''}</Typography>
+          <Typography>Type: {dataItem.contentType || dataItem.type || ''}</Typography>
+          <Typography>Owner: {dataItem.owner || ''}</Typography>
+        </CardContent>
+        <CardActions style={{ paddingBottom: '20px', paddingLeft: '10px' }}>
+          <Button variant='raised' color='primary' style={{
+            marginRight: '10px'
+          }} onClick={() => {
+            onEditStartClick(index, dataItem.title, dataItem.mediumSynopsis, dataItem.type);
+          }}>Edit</Button>
+          <Button variant='raised' color='secondary' onClick={() => {
+            onDeleteStartClick(index);
+          }}>Delete</Button>
+        </CardActions>
+      </Card>
+    );
+  });
+
+  if (loading) {
+    return (
+      <Loading style={{ width: '100px', height: '100px', margin: '100px auto 0 auto' }} delay={0} />
+    );
+  }
 
   return (
     <div className="List" style={{
@@ -51,7 +61,8 @@ const List = ({
 const mapStateToProps = state => ({
   data: state.data,
   editModal: state.editModal,
-  deleteModal: state.deleteModal
+  deleteModal: state.deleteModal,
+  loading: state.loading
 });
 
 const mapDispatchToProps = dispatch => ({
