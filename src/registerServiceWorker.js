@@ -18,7 +18,7 @@ var isLocalhost = Boolean(
     )
 );
 
-function register() {
+export default function register() {
   if ('serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location);
@@ -98,7 +98,7 @@ function checkValidServiceWorker(swUrl) {
     });
 }
 
-function unregister() {
+export function unregister() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready.then(registration => {
       registration.unregister();
