@@ -5,6 +5,7 @@ import {
   setEndpoint,
   setData
 } from './actions';
+import { createDB, saveData } from './indexed-db'
 
 let client;
 let endpoint;
@@ -16,6 +17,8 @@ async function setupClient(store) {
   const username = process.env.REACT_APP_USERNAME;
   const registryUrl = process.env.REACT_APP_REGISTRY_URL;
   let error;
+
+  createDB();
 
   client = new Client(
     username,
@@ -103,6 +106,7 @@ export const setCollection = async (filter, page) => {
 }
 
 export const createData = async data => {
+  saveData(data);
   const newResource = endpoint.newResource(data);
   await newResource.save();
   return Promise.resolve();
