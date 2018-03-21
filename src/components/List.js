@@ -19,9 +19,33 @@ const List = ({
   onEditStartClick,
   onDeleteStartClick,
   loading,
-  error
+  error,
+  offline
 }) => {
   const cards = data.map((dataItem, index) => {
+    return (
+      <Card key={index}>
+        <CardContent>
+          <Typography variant="headline" component="h2">{dataItem.title}</Typography>
+          <Typography>Medium Synopsis: {dataItem.mediumSynopsis || ''}</Typography>
+          <Typography>Type: {dataItem.contentType || dataItem.type || ''}</Typography>
+          <Typography>Owner: {dataItem.owner || ''}</Typography>
+        </CardContent>
+        <CardActions style={{ paddingBottom: '20px', paddingLeft: '10px' }}>
+          <Button variant='raised' color='primary' style={{
+            marginRight: '10px'
+          }} onClick={() => {
+            onEditStartClick(index, dataItem.title, dataItem.mediumSynopsis, dataItem.type);
+          }}>Edit</Button>
+          <Button variant='raised' color='secondary' onClick={() => {
+            onDeleteStartClick(index);
+          }}>Delete</Button>
+        </CardActions>
+      </Card>
+    );
+  });
+
+  const offlineCards = offline.map((dataItem, index) => {
     return (
       <Card key={index}>
         <CardContent>
@@ -52,13 +76,19 @@ const List = ({
 
   if (error) {
     return (
-      <div style={{ width: '300px', height: '100px', margin: '100px auto 0 auto' }}>
-        <Typography variant="headline" style={{
-          flex: 1,
-          color: '#e00'
-        }}>
-          You appear to be offline
-        </Typography>
+      <div>
+        <div style={{ width: '300px', height: '100px', margin: '100px auto 0 auto' }}>
+          <Typography variant="headline" style={{
+            flex: 1,
+            color: '#e00'
+          }}>
+            You appear to be offline
+          </Typography>
+        </div>
+        <div className="List">
+          <Typography variant="headline">Last viewed:</Typography>
+          {offlineCards}
+        </div>
       </div>
     );
   }
@@ -77,7 +107,8 @@ const mapStateToProps = state => ({
   editModal: state.editModal,
   deleteModal: state.deleteModal,
   loading: state.loading,
-  error: state.error
+  error: state.error,
+  offline: state.offline
 });
 
 const mapDispatchToProps = dispatch => ({

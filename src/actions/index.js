@@ -90,6 +90,14 @@ export function setError(error) {
   }
 }
 
+export const SET_OFFLINE = 'SET_OFFLINE';
+export function setOffline(data) {
+  return {
+    type: SET_OFFLINE,
+    data
+  }
+}
+
 export const SET_FILTER = 'SET_FILTER';
 export function setFilter(filter) {
   return {

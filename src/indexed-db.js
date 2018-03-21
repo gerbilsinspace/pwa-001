@@ -7,7 +7,12 @@ export function createDB() {
       case 0:
       case 1:
         upgradeDb.createObjectStore('newContent', { keyPath: 'ref' });
+        upgradeDb.transaction.objectStore('newContent')
+          .createIndex('type', 'type', { unique: false })
+
         upgradeDb.createObjectStore('lastViewed', { keyPath: 'ref' });
+        upgradeDb.transaction.objectStore('lastViewed')
+          .createIndex('type', 'type', { unique: false })
         break;
       default:
     }
@@ -32,4 +37,12 @@ export function saveData(data, table) {
       console.error(e);
     });
   });
+}
+
+export function getAll() {
+  const dbPromise = idb.open('showcase', 1);
+  return dbPromise.then(db =>
+    db.transaction('lastViewed')
+      .objectStore('lastViewed').getAll()
+  );
 }

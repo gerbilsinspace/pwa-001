@@ -4,9 +4,10 @@ import {
   setSession,
   setEndpoint,
   setData,
-  setError
+  setError,
+  setOffline
 } from './actions';
-import { createDB, saveData } from './indexed-db'
+import { createDB, saveData, getAll } from './indexed-db'
 
 let client;
 let endpoint;
@@ -18,6 +19,11 @@ const handleError = (err) => {
 }
 
 async function setupClient(store) {
+
+  getAll().then(data => {
+    dp(setOffline(data));
+  });
+
   const { dispatch, getState } = store;
   dp = dispatch;
   const username = process.env.REACT_APP_USERNAME;
@@ -61,7 +67,7 @@ async function setupClient(store) {
 
   dp(setSession(session));
 
-  const metadataService = await client.service('metadata').catch(err => {
+  const metadataService = await client.service('metadat').catch(err => {
     error = err
   });
 
