@@ -82,6 +82,14 @@ export function setData(data) {
   }
 }
 
+export const SET_ERROR = 'SET_ERROR';
+export function setError(error) {
+  return {
+    type: SET_ERROR,
+    error
+  }
+}
+
 export const SET_FILTER = 'SET_FILTER';
 export function setFilter(filter) {
   return {
