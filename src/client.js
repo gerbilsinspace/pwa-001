@@ -3,13 +3,19 @@ import {
   setTenant,
   setSession,
   setEndpoint,
-  setData
+  setData,
+  setError
 } from './actions';
 import { createDB, saveData } from './indexed-db'
 
 let client;
 let endpoint;
 let dp;
+
+const handleError = (err) => {
+  console.error(err);
+  dp(setError(err));
+}
 
 async function setupClient(store) {
   const { dispatch, getState } = store;
@@ -34,7 +40,7 @@ async function setupClient(store) {
   }
 
   if (error) {
-    console.log(error);
+    handleError(error);
     return;
   }
 
@@ -49,7 +55,7 @@ async function setupClient(store) {
   }
 
   if (error) {
-    console.log(error);
+    handleError(error);
     return;
   }
 
@@ -64,7 +70,7 @@ async function setupClient(store) {
   }
 
   if (error) {
-    console.log(error);
+    handleError(error);
     return;
   }
 
@@ -75,7 +81,7 @@ async function setupClient(store) {
   }
 
   if (error) {
-    console.log(error);
+    handleError(error);
     return;
   }
 
@@ -99,7 +105,7 @@ export const setCollection = async (filter, page) => {
     .orderByUpdatedAt()
     .desc()
     .count()).catch(err => {
-      console.log(err);
+      handleError(err);
     });
   const data = collection.rawData.contents;
   saveData(data, 'lastViewed');
@@ -115,7 +121,7 @@ export const createData = async data => {
 
 export const editData = async (data) => {
   await data.save().catch(err => {
-    console.log(err);
+    handleError(err);
   });
 }
 

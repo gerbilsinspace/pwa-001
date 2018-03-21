@@ -4,7 +4,7 @@ self.addEventListener('install', event =>
       cache.addAll([
         '.',
         'static/css/main.css',
-        'static/js/bundle.js',
+        'static/js/main.js',
         'https://fonts.googleapis.com/icon?family=Material+Icons',
         'https://fonts.gstatic.com/s/materialicons/v36/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2'
       ])

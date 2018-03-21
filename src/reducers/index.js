@@ -10,6 +10,7 @@ import {
   SET_FILTER,
   SET_PAGE,
   SET_DATA,
+  SET_ERROR,
   SET_DELETE_MODAL,
   SET_EDIT_MODAL,
   SET_DELETE_INDEX,
@@ -32,7 +33,8 @@ const reducers = (state = {
   editModal: false,
   deleteIndex: -1,
   editIndex: -1,
-  loading: true
+  loading: true,
+  error: null
 }, action) => {
   let result = { ...state };
 
@@ -66,6 +68,10 @@ const reducers = (state = {
       return result;
     case SET_DATA:
       result.data = [...action.data];
+      result.loading = false;
+      return result;
+    case SET_ERROR:
+      result.error = action.error;
       result.loading = false;
       return result;
     case ADD_DATA:

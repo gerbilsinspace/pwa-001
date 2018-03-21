@@ -18,7 +18,8 @@ const List = ({
   data = [],
   onEditStartClick,
   onDeleteStartClick,
-  loading
+  loading,
+  error
 }) => {
   const cards = data.map((dataItem, index) => {
     return (
@@ -49,6 +50,19 @@ const List = ({
     );
   }
 
+  if (error) {
+    return (
+      <div style={{ width: '300px', height: '100px', margin: '100px auto 0 auto' }}>
+        <Typography variant="headline" style={{
+          flex: 1,
+          color: '#e00'
+        }}>
+          You appear to be offline
+        </Typography>
+      </div>
+    );
+  }
+
   return (
     <div className="List" style={{
       marginTop: '100px'
@@ -62,7 +76,8 @@ const mapStateToProps = state => ({
   data: state.data,
   editModal: state.editModal,
   deleteModal: state.deleteModal,
-  loading: state.loading
+  loading: state.loading,
+  error: state.error
 });
 
 const mapDispatchToProps = dispatch => ({
