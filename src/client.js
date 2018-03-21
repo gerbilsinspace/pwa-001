@@ -67,7 +67,7 @@ async function setupClient(store) {
 
   dp(setSession(session));
 
-  const metadataService = await client.service('metadat').catch(err => {
+  const metadataService = await client.service('metadata').catch(err => {
     error = err
   });
 
