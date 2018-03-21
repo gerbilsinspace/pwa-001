@@ -102,11 +102,12 @@ export const setCollection = async (filter, page) => {
       console.log(err);
     });
   const data = collection.rawData.contents;
+  saveData(data, 'lastViewed');
   dp(setData(data));
 }
 
 export const createData = async data => {
-  saveData(data);
+  saveData([data], 'newContent');
   const newResource = endpoint.newResource(data);
   await newResource.save();
   return Promise.resolve();
