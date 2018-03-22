@@ -1,17 +1,16 @@
 import idb from 'idb';
 
+const storeName = 'videos';
+
 export function createDB() {
   if (!('indexedDB' in window)) return;
-  idb.open('showcase', 1, upgradeDb => {
+
+  idb.open('showcase', 2, upgradeDb => {
     switch (upgradeDb.oldVersion) {
       case 0:
       case 1:
-        upgradeDb.createObjectStore('newContent', { keyPath: 'ref' });
-        upgradeDb.transaction.objectStore('newContent')
-          .createIndex('type', 'type', { unique: false })
-
-        upgradeDb.createObjectStore('lastViewed', { keyPath: 'ref' });
-        upgradeDb.transaction.objectStore('lastViewed')
+        upgradeDb.createObjectStore(storeName, { keyPath: 'ref' });
+        upgradeDb.transaction.objectStore(storeName)
           .createIndex('type', 'type', { unique: false })
         break;
       default:
@@ -19,12 +18,12 @@ export function createDB() {
   });
 }
 
-export function saveData(data, table) {
+export function saveData(data) {
   if (!('indexedDB' in window)) return;
 
-  idb.open('showcase', 1).then(db => {
-    const tx = db.transaction(table, 'readwrite');
-    const store = tx.objectStore(table);
+  idb.open('showcase', 2).then(db => {
+    const tx = db.transaction(storeName, 'readwrite');
+    const store = tx.objectStore(storeName);
 
     return Promise.all(data.map(item =>
       store.add({
@@ -39,10 +38,13 @@ export function saveData(data, table) {
   });
 }
 
-export function getAll() {
-  const dbPromise = idb.open('showcase', 1);
+export function getData() {
+  if (!('indexedDB' in window)) return;
+
+  const dbPromise = idb.open('showcase', 2);
+
   return dbPromise.then(db =>
-    db.transaction('lastViewed')
-      .objectStore('lastViewed').getAll()
+      db.transaction(storeName)
+      .objectStore(storeName).getAll()
   );
 }

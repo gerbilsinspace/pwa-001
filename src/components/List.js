@@ -47,7 +47,7 @@ const List = ({
 
   const offlineCards = offline.map((dataItem, index) => {
     return (
-      <Card key={index}>
+      <Card key={index} style={{ background: '#efefef'}}>
         <CardContent>
           <Typography variant="headline" component="h2">{dataItem.title}</Typography>
           <Typography>Medium Synopsis: {dataItem.mediumSynopsis || ''}</Typography>
@@ -56,11 +56,14 @@ const List = ({
         </CardContent>
         <CardActions style={{ paddingBottom: '20px', paddingLeft: '10px' }}>
           <Button variant='raised' color='primary' style={{
-            marginRight: '10px'
+            marginRight: '10px',
+            background: '#666'
           }} onClick={() => {
             onEditStartClick(index, dataItem.title, dataItem.mediumSynopsis, dataItem.type);
           }}>Edit</Button>
-          <Button variant='raised' color='secondary' onClick={() => {
+          <Button variant='raised' color='secondary' style={{
+            background: '#666'
+          }} onClick={() => {
             onDeleteStartClick(index);
           }}>Delete</Button>
         </CardActions>
@@ -76,8 +79,8 @@ const List = ({
 
   if (error) {
     return (
-      <div>
-        <div style={{ width: '300px', height: '100px', margin: '100px auto 0 auto' }}>
+      <div style={{opacity: 0.7}}>
+        <div style={{ width: '300px', height: '80px', margin: '100px auto 0 auto' }}>
           <Typography variant="headline" style={{
             flex: 1,
             color: '#e00'
@@ -86,7 +89,6 @@ const List = ({
           </Typography>
         </div>
         <div className="List">
-          <Typography variant="headline">Last viewed:</Typography>
           {offlineCards}
         </div>
       </div>

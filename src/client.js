@@ -7,7 +7,7 @@ import {
   setError,
   setOffline
 } from './actions';
-import { createDB, saveData, getAll } from './indexed-db'
+import { createDB, saveData, getData } from './indexed-db'
 
 let client;
 let endpoint;
@@ -20,17 +20,18 @@ const handleError = (err) => {
 
 async function setupClient(store) {
 
-  getAll().then(data => {
+  createDB();
+
+  getData().then(data => {
     dp(setOffline(data));
-  });
+  })
+  .catch(err => console.error(err));
 
   const { dispatch, getState } = store;
   dp = dispatch;
   const username = process.env.REACT_APP_USERNAME;
   const registryUrl = process.env.REACT_APP_REGISTRY_URL;
   let error;
-
-  createDB();
 
   client = new Client(
     username,
@@ -114,14 +115,21 @@ export const setCollection = async (filter, page) => {
       handleError(err);
     });
   const data = collection.rawData.contents;
-  saveData(data, 'lastViewed');
+  saveData(data);
   dp(setData(data));
 }
 
-export const createData = async data => {
-  saveData([data], 'newContent');
-  const newResource = endpoint.newResource(data);
-  await newResource.save();
+export const createData = data => {
+  saveData([data]);
+  try {
+    const newResource = endpoint.newResource(data);
+    newResource.save();
+  } catch (e) {
+    getData().then(data => {
+      dp(setOffline(data));
+    })
+    .catch(err => console.error(err));
+  }
   return Promise.resolve();
 }
 
