@@ -8,6 +8,7 @@ import {
   setOffline
 } from './actions';
 import { createDB, saveData, getData } from './indexed-db'
+import { setUp } from './push'
 
 let client;
 let endpoint;
@@ -21,6 +22,8 @@ const handleError = (err) => {
 async function setupClient(store) {
 
   createDB();
+
+  setUp();
 
   getData().then(data => {
     dp(setOffline(data));

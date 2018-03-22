@@ -21,3 +21,28 @@ self.addEventListener('fetch', event =>
     )
   )
 );
+
+self.addEventListener('push', event => {
+  const options = {
+    body: 'The talk is almost over!',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: '-push-notification'
+    },
+    actions: [
+      {
+        action: 'explore',
+        title: 'Do something now'
+      },
+      {
+        action: 'close',
+        title: 'Close the notification'
+      },
+    ]
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('Lightning Talk', options)
+  );
+});
