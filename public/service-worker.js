@@ -1,6 +1,8 @@
-self.addEventListener('install', event =>
+self.addEventListener('install', event => {
+  self.skipWaiting();
+
   event.waitUntil(
-    caches.open('showcase-v1').then(cache =>
+    caches.open('showcase-v2').then(cache =>
       cache.addAll([
         '.',
         'static/css/main.css',
@@ -10,7 +12,7 @@ self.addEventListener('install', event =>
       ])
     )
   )
-);
+});
 
 self.addEventListener('fetch', event =>
   event.respondWith(
