@@ -5,6 +5,8 @@ We don't expect anyone to run the app. Here are the examples we were using for t
 *  [Cache API and Indexed DB](https://indexed-db--piksel-pwa.netlify.com)
 *  [Notifications API and Push API](https://push--piksel-pwa.netlify.com)
 
+And here is our [notes](https://pwa-slides.netlify.com)
+
 If you do want to run this locally, fair warning, the setup is a bit esoteric.
 
 npm install
