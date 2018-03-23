@@ -7,7 +7,7 @@ We don't expect anyone to run the app. Here are the examples we were using for t
 
 And here is our [notes](https://pwa-slides.netlify.com)
 
-If you do want to run this locally, fair warning, the setup is a bit esoteric.
+If you do want to run this locally, fair warning, the setup is a bit esoteric, and I'm not allowed to publish the values of the environment variables. Sorry!
 
 npm install
 
