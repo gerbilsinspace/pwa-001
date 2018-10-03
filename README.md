@@ -1,3 +1,6 @@
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/gerbilsinspace/pwa-001.svg)](https://greenkeeper.io/)
+
 We don't expect anyone to run the app. Here are the examples we were using for the demo.
 
 *  [App Manifest](https://service-worker--piksel-pwa.netlify.com) - code lives on the service-worker branch
